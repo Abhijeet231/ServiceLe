@@ -1,14 +1,23 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const serviceCategorySchema = new Schema ({
+const serviceCategorySchema = new Schema(
+  {
     name: {
-        type: String,
-        required: [true, "Name is required!"],
-        trim: true,
+      type: String,
+      required: [true, "Name is required!"],
+      trim: true,
     },
+  },
+  { timestamps: true },
+);
 
-}, {timestamps: true});
+//INDEXING
+serviceCategorySchema.index({ name: "text" });
 
-const ServiceCategory = mongoose.model("ServiceCategory", serviceCategorySchema);
+//MODEL
+const ServiceCategory = mongoose.model(
+  "ServiceCategory",
+  serviceCategorySchema,
+);
 
 export default ServiceCategory;

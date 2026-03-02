@@ -10,7 +10,6 @@ const userSchema = new Schema ({
         type: String,
         required: [true, "Email is required!"],
         unique: true,
-        index: true,
         match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/ , "please use a valid email address"],
     },
     password: {
@@ -19,7 +18,7 @@ const userSchema = new Schema ({
     },
     role: {
         type: String,
-        enum: ["Customer", "Provider", "Admin"],
+        enum: ["customer", "provider", "admin"],
         required: true,
     },
     city: {
@@ -30,6 +29,10 @@ const userSchema = new Schema ({
 
 }, {timestamps: true});
 
+// INDEXING
+userSchema.index({email:1})
+
+//MODEL
 const User = mongoose.model("User", userSchema);
 
 export default User;
