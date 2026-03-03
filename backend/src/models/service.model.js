@@ -21,10 +21,6 @@ const serviceSchema = new Schema ({
     basePrice: {
         type: Number,
         required: [true, "BasePrice is required!"]
-    },
-    image: {
-        url: {type: String},
-        public_id: {type: String}
     }
 
 }, {timestamps: true});
