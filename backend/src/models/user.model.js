@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import mongoose, {Schema} from "mongoose";
 
 const userSchema = new Schema ({
@@ -12,6 +13,7 @@ const userSchema = new Schema ({
         type: String,
         required: [true, "Email is required!"],
         unique: true,
+        trim: true,
         match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/ , "please use a valid email address"],
     },
     password: {
@@ -19,11 +21,12 @@ const userSchema = new Schema ({
         required: [true, "Password is required!"],
             minlength: [6, "Password must be at least 6 characters long!"],
             maxlength: [50, "Password must be less than 50 characters long!"],
+           
     },
     role: {
         type: String,
         enum: ["customer", "provider", "admin"],
-        required: true,
+         default: "customer"
     },
     city: {
         type: String,
@@ -36,6 +39,19 @@ const userSchema = new Schema ({
 
 // INDEXING
 userSchema.index({email:1})
+
+// Password Hashing
+userSchema.pre("save", async function () {
+    if(!this.isModified("password")) return;
+
+    this.password = await bcrypt.hash(this.password, 9);
+})
+
+// Checking Password
+userSchema.methods.isPasswordCorrect = async function(password) {
+   return await bcrypt.compare(password, this.password)
+};
+
 
 //MODEL
 const User = mongoose.model("User", userSchema);
