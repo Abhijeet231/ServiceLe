@@ -5,12 +5,16 @@ const serviceSchema = new Schema ({
     name: {
         type: String,
         required: [true, "Service Name is required!"],
-        trim: true,        
+        trim: true,  
+            minlength: [2, "Service Name must be at least 2 characters long!"],
+            maxlength: [100, "Service Name must be less than 100 characters long!"],      
     },
     description: {
         type: String,
         required: [true, "Service Description is required!"],
         trim: true,
+        minlength: [10, "Service Description must be at least 10 characters long!"],
+        maxlength: [2000, "Service Description must be less than 2000 characters long!"],
     },
     categoryId: {
         type: Schema.Types.ObjectId,
@@ -20,7 +24,8 @@ const serviceSchema = new Schema ({
     },
     basePrice: {
         type: Number,
-        required: [true, "BasePrice is required!"]
+        required: [true, "BasePrice is required!"],
+        min: [0, "BasePrice must be a positive number!"],
     }
 
 }, {timestamps: true});

@@ -21,11 +21,14 @@ const providerProfileSchema = new Schema ({
     bio: {
         type: String,
         required: [true, "Bio is required!"],
-        trim: true
+        trim: true,
+        minlength: [10, "Bio must be at least 10 characters long!"],
+        maxlength: [2000, "Bio must be less than 2000 characters long!"],
     },
     experienceYears: {
         type: Number,
         required: [true, "Experience is required!"],
+        min: [0, "Experience must be a positive number!"],
     },
     isApprovedByAdmin: {
         type: Boolean,
