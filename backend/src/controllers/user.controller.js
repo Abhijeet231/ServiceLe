@@ -85,22 +85,35 @@ export const getLoggedInUser = asyncHandler(async (req, res) => {
 
 // Update User Profile
 export const updateUserProfile = asyncHandler(async (req, res) => {
-    
-     const { name, email, city } = req.body;
+  const { name, email, city } = req.body;
 
-     const user = await User.findById(req.user._id);
-     if(!user){
-        throw new ApiError(400, "User Not found!")
-     }
+  const user = await User.findById(req.user._id).select("-password");
+  if (!user) {
+    throw new ApiError(400, "User Not found!");
+  }
 
+  if (name && name.trim()) user.name = name.trim();
+  if (email && email.trim()) user.email = email.toLowerCase().trim();
+  if (city && city.trim()) user.city = city.trim();
 
-     if(name && name.trim()) user.name = name;
-     if(email && email.trim() && email.toLowerCase()) user.email = email;
-     if(city && city.trim()) user.city = city;
+  await user.save();
 
-
-     return res
-     .status(200)
-     .json(new ApiResponse(200, user, "User Profile Updated successfully"))
-
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User Profile Updated successfully"));
 });
+
+// Logout User
+export const logoutUser = asyncHandler(async(req,res) => {
+  if(!req.user?._id) {
+    throw new ApiError(401, "Unautorised Request!");
+  }
+
+  console.log("Logged IN User:", req.user );
+
+   return res
+   .status(200)
+   .clearCookie("accessToken", cookieOptions)
+   .json(new ApiResponse(200, null, "Logged Out Successfully!"))
+
+})
