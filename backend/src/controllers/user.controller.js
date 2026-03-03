@@ -69,10 +69,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
 // Get LoggedIn User
 export const getLoggedInUser = asyncHandler(async (req, res) => {
-  if (!req.user?._id) {
-    throw new ApiError(401, "Unauthorised request!");
-  }
-
+ 
   const user = await User.findById(req.user?._id).select("-password");
   if (!user) {
     throw new ApiError(400, "User Not Found!");
@@ -105,11 +102,6 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
 // Logout User
 export const logoutUser = asyncHandler(async(req,res) => {
-  if(!req.user?._id) {
-    throw new ApiError(401, "Unautorised Request!");
-  }
-
-  console.log("Logged IN User:", req.user );
 
    return res
    .status(200)
