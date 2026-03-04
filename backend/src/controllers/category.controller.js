@@ -106,7 +106,3 @@ export const deleteCategory = asyncHandler(async (req, res) => {
       ),
     );
 });
-
-
-
-

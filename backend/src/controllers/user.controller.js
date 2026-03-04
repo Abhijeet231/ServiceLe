@@ -37,3 +37,15 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "User Profile Updated successfully"));
 });
 
+// Delete user Profile 
+export const deleteUserProfile = asyncHandler(async(req,res) => {
+
+//   ok so i'm thinking to add delete user controller lgoic- 
+// first fetch user from req.user , 
+// check user exists in DB > now use if else . 
+// if user.role == " customer" then - find all related Bookings and if booking status is - requested/pending/inprogress then change status to cancelled. 
+// find all reviews by user > and populate the customerId field and make the name to anonymous user or user not exists but still other users can see teh review . then delete the customer ID . 
+
+// Now if role == provider , then do the same - find all bookings realted to him, if booking status is - requested then change status to cancelled, but if status is - progress/ or provider accepts that then show error  - that first need to completed assigned task. thene delete. 
+
+})

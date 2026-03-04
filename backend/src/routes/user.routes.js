@@ -1,20 +1,17 @@
 import {Router} from "express";
-
-
+import { getLoggedInUser, updateUserProfile } from "../controllers/user.controller.js";
+import verifyJWT from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-//Register user
-router.post("/register")
-
-// Login user
-router.post("/login")
 
 // Get Current User
-router.get("/users/me")
+router.get("/",verifyJWT, getLoggedInUser )
 
 // Update User Profile
-router.patch("/users/me")
+router.patch("/",verifyJWT, updateUserProfile)
 
-// Delete User Profile
-router.delete("/users/me")
+
+
+
+export default router;

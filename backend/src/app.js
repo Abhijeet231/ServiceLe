@@ -18,6 +18,20 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+// Auth Routes
+import authRouter from "./routes/auth.routes.js";
+app.use("/api/v1/auth", authRouter)
 
+// User Routes
+import userRouter from "./routes/user.routes.js"
+app.use("/api/v1/users/me", userRouter);
+
+// Category Routes
+import categoryRouter from "./routes/categories.routes.js"
+app.use("/api/v1/categories", categoryRouter);
+
+// Service Routes
+import serviceRouter from "./routes/services.routes.js"
+app.use("/api/v1", serviceRouter);
 
 export default app;

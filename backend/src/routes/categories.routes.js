@@ -6,16 +6,18 @@ import { createCategory, getAllCategories, getIndividualCategory, deleteCategory
 const router = Router();
 
 //Create Category
-router.post('/api/v1/categories')
+router.post('/', createCategory)
 
 
 // Get all categories
-router.get('/api/v1/categories');
+router.get('/', getAllCategories);
 
 
 // Get Individual Category
-router.get('/api/v1/categories/:categoryId');
+router.get('/:categoryId', getIndividualCategory);
 
 
 // Delete Category
-router.delete("/api/v1/categories/:categoryId")
+router.delete("/:categoryId", deleteCategory);
+
+export default router;

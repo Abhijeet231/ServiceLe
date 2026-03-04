@@ -6,7 +6,7 @@ import ServiceCategory from "../models/serviceCategory.model.js";
 import Booking from "../models/booking.model.js";
 
 // Create Service
-const createServices = asyncHandler(async (req, res) => {
+export const createServices = asyncHandler(async (req, res) => {
   if (req.user.role !== "admin") {
     throw new ApiError(403, "Only admin can create services!");
   }
@@ -42,7 +42,7 @@ const createServices = asyncHandler(async (req, res) => {
 });
 
 // Get All Service Listed By Caategory /api/v1/categories/:categoryId/services
-const getServicesByCategory = asyncHandler(async (req, res) => {
+export const getServicesByCategory = asyncHandler(async (req, res) => {
   const { categoryId } = req.params;
 
   const category = await ServiceCategory.findById(categoryId);
@@ -58,7 +58,7 @@ const getServicesByCategory = asyncHandler(async (req, res) => {
 });
 
 // Search Service  /api/v1/services/search?q=clean
-const searchServices = asyncHandler(async (req, res) => {
+export const searchServices = asyncHandler(async (req, res) => {
   const { q } = req.query;
 
   if (!q || q.trim() === "") {
@@ -80,7 +80,7 @@ const searchServices = asyncHandler(async (req, res) => {
 });
 
 // Service Details /api/v1/services/:serviceId
-const serviceDetails = asyncHandler(async (req, res) => {
+export const serviceDetails = asyncHandler(async (req, res) => {
   const { serviceId } = req.params;
 
   const service = await Service.findById(serviceId).lean();
@@ -96,7 +96,7 @@ const serviceDetails = asyncHandler(async (req, res) => {
 });
 
 // Delete Service /api/v1/services/:serviceId
-const deleteService = asyncHandler(async (req, res) => {
+export const deleteService = asyncHandler(async (req, res) => {
   if (req.user.role !== "admin") {
     throw new ApiError(403, "You are not authorised to delete Service!!");
   }
