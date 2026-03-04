@@ -85,8 +85,13 @@ export const deleteCategory = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Category not found");
   }
 
-  // deleting all services under this category
-  await Service.deleteMany({ categoryId });
+  // find all services under this category
+  const serviceCount  =  await Service.countDocuments({ categoryId });
+
+ // Only delte category if no services exists under this category
+  if(serviceCount > 0) {
+    throw new ApiError(400, "Cannot delete category. Services still exist under this category. Please delete the services first.");
+  }
 
   // delete category
   await ServiceCategory.findByIdAndDelete(categoryId);
@@ -97,7 +102,14 @@ export const deleteCategory = asyncHandler(async (req, res) => {
       new ApiResponse(
         200,
         {},
-        "Category and related services deleted successfully",
+        "Category deleted successfully",
       ),
     );
 });
+
+
+
+// const activeBookings = await Booking.find({
+//   serviceId,
+//   status: { $in: ["requested", "confirmed", "in-progress"] }
+// });
