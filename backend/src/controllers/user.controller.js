@@ -2,8 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import User from "../models/user.model.js";
-import genAccessToken from "../utils/genAccessToken.js";
-import cookieOptions from "../utils/cookieOptions.js";
+
 
 // Get LoggedIn User
 export const getLoggedInUser = asyncHandler(async (req, res) => {
@@ -38,4 +37,3 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "User Profile Updated successfully"));
 });
 
-// Delete User Profile

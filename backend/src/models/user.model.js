@@ -20,7 +20,7 @@ const userSchema = new Schema ({
         type: String,
         required: [true, "Password is required!"],
             minlength: [6, "Password must be at least 6 characters long!"],
-            maxlength: [50, "Password must be less than 50 characters long!"],
+           
            
     },
     role: {
@@ -37,8 +37,7 @@ const userSchema = new Schema ({
 
 }, {timestamps: true});
 
-// INDEXING
-userSchema.index({email:1})
+
 
 // Password Hashing
 userSchema.pre("save", async function () {
