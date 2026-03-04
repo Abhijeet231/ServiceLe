@@ -32,7 +32,7 @@ const serviceSchema = new Schema ({
 
 // INDEXING
 serviceSchema.index({ categoryId: 1 });
-serviceSchema.index({ name: "text" });
+serviceSchema.index({ name: "text", description: "text" });
 
 // Model
 const Service = mongoose.model("Service", serviceSchema);

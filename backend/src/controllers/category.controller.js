@@ -109,7 +109,4 @@ export const deleteCategory = asyncHandler(async (req, res) => {
 
 
 
-// const activeBookings = await Booking.find({
-//   serviceId,
-//   status: { $in: ["requested", "confirmed", "in-progress"] }
-// });
+

@@ -7,10 +7,14 @@ const router = Router();
 // Create Services
 router.post("/api/v1/categories/:categoryId/services")
 
-//Get all Services
+//Get all Services Listed By Categories
 router.get("/api/v1/categories/:categoryId/services")
 
-// Get Individual service
+
+// Search Services 
+router.get("/api/v1/services/search?q=clean");
+
+// Get Individual service details 
 router.get("/api/v1/services/:serviceId")
 
 

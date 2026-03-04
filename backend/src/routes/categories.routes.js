@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { createCategory, getAllCategories, getIndividualCategory,  } from "../controllers/category.controller";
+import { createCategory, getAllCategories, getIndividualCategory, deleteCategory  } from "../controllers/category.controller";
 
 
 

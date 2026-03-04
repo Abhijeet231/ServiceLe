@@ -9,7 +9,7 @@ const bookingSchema = new Schema(
     },
     providerId: {
       type: Schema.Types.ObjectId,
-      ref: "Provider",
+      ref: "ProviderProfile",
       required: [true, "ProviderId is required!"],
     },
     serviceId: {
