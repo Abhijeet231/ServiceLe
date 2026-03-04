@@ -33,7 +33,7 @@ const bookingSchema = new Schema(
       type: Date,
       required: [true, "Service date & time is required!"],
     },
-    notes: {
+    customerNotes: {
       type: String,
       trim: true,
       required: [true, "Notes is required!"],
@@ -49,7 +49,11 @@ const bookingSchema = new Schema(
       required: [true, "Status is required!"],
       default: "requested",
     },
-    workNotes: {
+    cancelledBy: {
+      type: String,
+      enum: ["customer", "provider"],
+    },
+    providerWorkNotes: {
       type: String,
       maxlength: 2000,
     },
