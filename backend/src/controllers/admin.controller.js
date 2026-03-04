@@ -3,19 +3,15 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 
-
-// Approve Providers
-
-
-// Create Categories
+// get Pending Providers ( /admin/providers/:id/reject)
 
 
-// Delete Categories
+// Approve Providers ( /admin/providers/pending)
 
 
-// Create Services Under Categories
+// Reject Providers ( /admin/providers/:id/approve)
 
 
-// Delete Services Under Categories
+
 
 

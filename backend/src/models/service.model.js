@@ -7,7 +7,7 @@ const serviceSchema = new Schema ({
         required: [true, "Service Name is required!"],
         trim: true,  
             minlength: [2, "Service Name must be at least 2 characters long!"],
-            maxlength: [100, "Service Name must be less than 100 characters long!"],      
+            maxlength: [200, "Service Name must be less than 100 characters long!"],      
     },
     description: {
         type: String,
