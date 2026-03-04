@@ -2,9 +2,10 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import ServiceCategory from "../models/serviceCategory.model.js";
+import Service from "../models/service.model.js";
 
 // Create Category ( /categories )
-const createCategory = asyncHandler(async (req, res) => {
+export const createCategory = asyncHandler(async (req, res) => {
   if (req.user.role !== "admin") {
     throw new ApiError(403, "Only admin can create Categories!");
   }
@@ -23,20 +24,80 @@ const createCategory = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Category already exists!");
   }
 
-    const category = await ServiceCategory.create({
-        name: name.trim().toLowerCase()
-    });
+  const category = await ServiceCategory.create({
+    name: name.trim().toLowerCase(),
+  });
 
-
-return res.status(201)
-.json(new ApiResponse(201, category, "Category created successfully."))
-
+  return res
+    .status(201)
+    .json(new ApiResponse(201, category, "Category created successfully."));
 });
 
 // Get all Categories ( /categories)
-const getAllCategories = asyncHandler(async(req,res) => {
-    const allCategories = await ServiceCategory.find().sort({ createdAt: -1 });
+export const getAllCategories = asyncHandler(async (req, res) => {
+  const allCategories = await ServiceCategory.find().sort({ createdAt: -1 });
 
-    return res.status(200)
-    .json(new ApiResponse(200, allCategories, "All categories retrieved successfully!"))
-})
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        allCategories,
+        "All categories retrieved successfully!",
+      ),
+    );
+});
+
+// Get Single Category
+export const getIndividualCategory = asyncHandler(async (req, res) => {
+  const { categoryId } = req.params;
+
+  if (!categoryId) {
+    throw new ApiError(400, "Category Id is required!");
+  }
+
+  const category = await ServiceCategory.findById(categoryId);
+
+  if (!category) {
+    throw new ApiError(404, "category not found");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, category, "Category retrived successfully."));
+});
+
+// Delete Individual Category
+export const deleteCategory = asyncHandler(async (req, res) => {
+  if (req.user?.role !== "admin") {
+    throw new ApiError(403, "Only Admin can perform this action!");
+  }
+
+  const { categoryId } = req.params;
+
+  if (!categoryId) {
+    throw new ApiError(400, "Category Id is required!");
+  }
+
+  const category = await ServiceCategory.findById(categoryId);
+
+  if (!category) {
+    throw new ApiError(404, "Category not found");
+  }
+
+  // deleting all services under this category
+  await Service.deleteMany({ categoryId });
+
+  // delete category
+  await ServiceCategory.findByIdAndDelete(categoryId);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        {},
+        "Category and related services deleted successfully",
+      ),
+    );
+});

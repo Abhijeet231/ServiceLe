@@ -14,7 +14,7 @@ const serviceCategorySchema = new Schema(
 );
 
 //INDEXING
-serviceCategorySchema.index({ name: "text" });
+serviceCategorySchema.index({ name: 1}, {unique: true});
 
 //MODEL
 const ServiceCategory = mongoose.model(
