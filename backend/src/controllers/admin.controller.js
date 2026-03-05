@@ -3,7 +3,11 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import ProviderProfile from "../models/providerProfile.model.js";
 
-// get Pending Providers 
+/**
+ * @desc    Get Pending Providers
+ * @route   GET /api/v1/admin/providers/pending
+ * @access  Private (admin only)
+ */
 export const getPendingProviders = asyncHandler(async (req, res) => {
   if (req.user.role !== "admin") {
     throw new ApiError(403, "You are not authorised to perform this action.");
@@ -23,7 +27,11 @@ export const getPendingProviders = asyncHandler(async (req, res) => {
     );
 });
 
-// Approve Providers 
+/**
+ * @desc    Approve Providers
+ * @route   PATCH /api/v1/admin/providers/:providerId/approve
+ * @access  Private (admin only)
+ */
 export const approveProvider = asyncHandler(async (req, res) => {
   if (req.user.role !== "admin") {
     throw new ApiError(403, "Only admin can approve providers");
@@ -49,9 +57,12 @@ export const approveProvider = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, provider, "Provider approved successfully"));
 });
 
-// Reject Providers 
+/**
+ * @desc   Reject Providers
+ * @route   PATCH /api/v1/admin/providers/:providerId
+ * @access  Private (admin only)
+ */
 export const rejectProvider = asyncHandler(async (req, res) => {
-
   if (req.user.role !== "admin") {
     throw new ApiError(403, "Only admin can reject providers");
   }

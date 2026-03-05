@@ -9,7 +9,7 @@ import { validateServicesForCategory } from "../utils/validateServiceForCategory
  * @route   POST /api/v1/providers/profile
  * @access  Private (Provider)
  */
-const createProviderProfile = asyncHandler(async (req, res) => {
+export const createProviderProfile = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { categoryId, serviceIds, bio, experienceYears } = req.body;
 
@@ -41,7 +41,7 @@ const createProviderProfile = asyncHandler(async (req, res) => {
  * @route   PACH /api/v1/providers/profile
  * @access  Private (Provider)
  */
-const updateProviderProfile = asyncHandler(async (req, res) => {
+export const updateProviderProfile = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { categoryId, serviceIds, bio, experienceYears } = req.body;
 
@@ -80,10 +80,10 @@ const updateProviderProfile = asyncHandler(async (req, res) => {
 
 /**
  * @desc    Get all approved Providers profile
- * @route   POST /api/v1/providers/:providerId
+ * @route   POST /api/v1/providers
  * @access  Public 
- */
-const getAllProvidersProfile = asyncHandler(async (req, res) => {
+ **/
+export const getAllProvidersProfile = asyncHandler(async (req, res) => {
   const providers = await ProviderProfile.find({
     status: "approved",
     availabilityStatus: true,
@@ -115,7 +115,7 @@ const getAllProvidersProfile = asyncHandler(async (req, res) => {
  * @route   POST /api/v1/providers/:providerId
  * @access  publiC
  */
-const getProviderProfileDetails = asyncHandler(async (req, res) => {
+export const getProviderProfileDetails = asyncHandler(async (req, res) => {
   const { providerId } = req.params;
 
   const provider = await ProviderProfile.findById(providerId)
@@ -143,7 +143,7 @@ const getProviderProfileDetails = asyncHandler(async (req, res) => {
  * @route   POST /api/v1/providers/availability
  * @access  Private (provider only)
  */
-const toggleAvailabilityStatus = asyncHandler(async (req, res) => {
+export const toggleAvailabilityStatus = asyncHandler(async (req, res) => {
   if (req.user.role !== "provider") {
     throw new ApiError(403, "You are not authorised to perform this action!");
   }

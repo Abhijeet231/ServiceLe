@@ -1,25 +1,28 @@
 import {Router} from "express";
 import verifyJWT from "../middleware/auth.middleware.js";
+import { createProviderProfile, updateProviderProfile, getAllProvidersProfile, getProviderProfileDetails, toggleAvailabilityStatus } from "../controllers/serviceProvider.controller.js";
 
 const router = Router();
 
 // Create Provider Profile
-router.post("/api/v1/providers/profile");
+router.post("/profile", verifyJWT, createProviderProfile);
 
 
 // Update Provider Profile
-router.patch("/api/v1/providers/profile");
+router.patch("/profile", verifyJWT, updateProviderProfile);
 
 
 // Get All Approved Available Providers Profile
-router.get("/api/v1/providers");
+router.get("/", getAllProvidersProfile);
 
 
 // Get Single Provider Profile
-router.get("/api/v1/providers/:providerId");
+router.get("/:providerId", getProviderProfileDetails);
 
 
 // Toggle Availability Status
-router.patch("/api/v1/providers/availability")
+router.patch("/availability", verifyJWT, toggleAvailabilityStatus);
+
+export default router;
 
 

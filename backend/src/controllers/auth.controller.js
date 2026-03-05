@@ -5,7 +5,12 @@ import User from "../models/user.model.js";
 import genAccessToken from "../utils/genAccessToken.js";
 import cookieOptions from "../utils/cookieOptions.js";
 
-// Register User
+
+/**
+ * @desc    Register User
+ * @route   POST /api/v1/auth/register
+ * @access  Public
+ */
 export const registerUser = asyncHandler(async (req, res) => {
   console.log("Incoming Body:", req.body);
 
@@ -41,7 +46,12 @@ export const registerUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, createdUser, "User Registered Successfully"));
 });
 
-// Login User
+
+/**
+ * @desc    Login User
+ * @route   POST /api/v1/auth/login
+ * @access  Public
+ */
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -68,8 +78,13 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 // Logout User
+/**
+ * @desc    Logout User
+ * @route   POST /api/v1/auth/logout
+ * @access  Private (use Auth middleware)
+ */
 export const logoutUser = asyncHandler(async(req,res) => {
-
+  
    return res
    .status(200)
    .clearCookie("accessToken", cookieOptions)

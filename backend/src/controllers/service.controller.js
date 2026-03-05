@@ -5,7 +5,12 @@ import Service from "../models/service.model.js";
 import ServiceCategory from "../models/serviceCategory.model.js";
 import Booking from "../models/booking.model.js";
 
-// Create Service
+
+/**
+ * @desc    Create Service
+ * @route   POST /api/v1/categories/:categoryId/services
+ * @access  Private (admin only)
+ */
 export const createServices = asyncHandler(async (req, res) => {
   if (req.user.role !== "admin") {
     throw new ApiError(403, "Only admin can create services!");
@@ -41,7 +46,12 @@ export const createServices = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, service, "Service Created Successfully."));
 });
 
-// Get All Service Listed By Caategory /api/v1/categories/:categoryId/services
+
+/**
+ * @desc   Get All Service Listed By Caategory
+ * @route   GET /api/v1/categories/services
+ * @access  Public
+ */
 export const getServicesByCategory = asyncHandler(async (req, res) => {
   const { categoryId } = req.params;
 
@@ -57,7 +67,12 @@ export const getServicesByCategory = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, services, "Fetched All Services Successfully!"));
 });
 
-// Search Service  /api/v1/services/search?q=clean
+
+/**
+ * @desc   Search Service
+ * @route   GET /api/v1/services/:serviceId
+ * @access  Public
+ */
 export const searchServices = asyncHandler(async (req, res) => {
   const { q } = req.query;
 
@@ -79,7 +94,12 @@ export const searchServices = asyncHandler(async (req, res) => {
     );
 });
 
-// Service Details /api/v1/services/:serviceId
+
+/**
+ * @desc   Service Details
+ * @route   GET /api/v1/services/:serviceId
+ * @access  Public
+ */
 export const serviceDetails = asyncHandler(async (req, res) => {
   const { serviceId } = req.params;
 
@@ -96,6 +116,12 @@ export const serviceDetails = asyncHandler(async (req, res) => {
 });
 
 // Delete Service /api/v1/services/:serviceId
+
+/**
+ * @desc   Delete Service
+ * @route   DELETE /api/v1/services/:serviceId
+ * @access  Pirvate(admin only)
+ */
 export const deleteService = asyncHandler(async (req, res) => {
   if (req.user.role !== "admin") {
     throw new ApiError(403, "You are not authorised to delete Service!!");
