@@ -34,4 +34,8 @@ app.use("/api/v1/categories", categoryRouter);
 import serviceRouter from "./routes/services.routes.js"
 app.use("/api/v1", serviceRouter);
 
+// Admin Routes
+import adminRouter from "./routes/admin.routes.js"
+app.use("/api/v1/admin", adminRouter);
+
 export default app;

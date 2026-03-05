@@ -4,7 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import ProviderProfile from "../models/providerProfile.model.js";
 
 // get Pending Providers 
-const getPendingProviders = asyncHandler(async (req, res) => {
+export const getPendingProviders = asyncHandler(async (req, res) => {
   if (req.user.role !== "admin") {
     throw new ApiError(403, "You are not authorised to perform this action.");
   }
@@ -24,7 +24,7 @@ const getPendingProviders = asyncHandler(async (req, res) => {
 });
 
 // Approve Providers 
-const approveProvider = asyncHandler(async (req, res) => {
+export const approveProvider = asyncHandler(async (req, res) => {
   if (req.user.role !== "admin") {
     throw new ApiError(403, "Only admin can approve providers");
   }
@@ -50,7 +50,8 @@ const approveProvider = asyncHandler(async (req, res) => {
 });
 
 // Reject Providers 
-const rejectProvider = asyncHandler(async (req, res) => {
+export const rejectProvider = asyncHandler(async (req, res) => {
+
   if (req.user.role !== "admin") {
     throw new ApiError(403, "Only admin can reject providers");
   }

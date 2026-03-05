@@ -5,6 +5,7 @@ const providerProfileSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
+    unique: true,
   },
   categoryId: {
     type: Schema.Types.ObjectId,
@@ -56,7 +57,11 @@ const providerProfileSchema = new Schema({
 //INDEXING
 providerProfileSchema.index({ categoryId: 1 });
 providerProfileSchema.index({ userId: 1 });
-providerProfileSchema.index({ isApprovedByAdmin: 1 });
+providerProfileSchema.index({
+  status: 1,
+  availabilityStatus: 1,
+  averageRating: -1
+});
 
 //MODEL
 const ProviderProfile = mongoose.model(
