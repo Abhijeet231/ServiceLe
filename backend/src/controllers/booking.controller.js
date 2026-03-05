@@ -17,9 +17,6 @@ import {
  * @access  Private (Customer only)
  */
 export const createBooking = asyncHandler(async (req, res) => {
-  if (req.user.role !== "customer") {
-    throw new ApiError(403, "Only customers can create bookings");
-  }
 
   const { serviceId, address, city, dateTime, customerNotes } = req.body;
   const customerId = req.user._id;
@@ -73,9 +70,6 @@ export const createBooking = asyncHandler(async (req, res) => {
  * @access  Private (Customer only)
  */
 export const cancelBooking = asyncHandler(async (req, res) => {
-  if (req.user.role !== "customer") {
-    throw new ApiError(403, "Only customers can cancel bookings");
-  }
 
   const { bookingId } = req.params;
 
@@ -115,9 +109,6 @@ export const cancelBooking = asyncHandler(async (req, res) => {
  * @access  Private (Customer only)
  */
 export const rescheduleBooking = asyncHandler(async (req, res) => {
-  if (req.user.role !== "customer") {
-    throw new ApiError(403, "Only customers can reschedule bookings");
-  }
 
   const { bookingId } = req.params;
   const { dateTime } = req.body;
@@ -179,9 +170,6 @@ export const rescheduleBooking = asyncHandler(async (req, res) => {
  * @access  Private (Service Provider only)
  */
 export const acceptBookingRequest = asyncHandler(async (req, res) => {
-  if (req.user.role !== "provider") {
-    throw new ApiError(403, "You are not authorised to perform this action!!");
-  }
 
   const { bookingId } = req.params;
 
@@ -227,9 +215,6 @@ export const acceptBookingRequest = asyncHandler(async (req, res) => {
  * @access  Private (Service Provider only)
  */
 export const rejectBookingRequest = asyncHandler(async (req, res) => {
-  if (req.user.role !== "provider") {
-    throw new ApiError(403, "You are not authorised to perform this action!!");
-  }
 
   const { bookingId } = req.params;
 
@@ -278,9 +263,6 @@ export const rejectBookingRequest = asyncHandler(async (req, res) => {
  * @access  Private (Service Provider only)
  */
 export const updateBookingStatus = asyncHandler(async (req, res) => {
-  if (req.user.role !== "provider") {
-    throw new ApiError(403, "You are not authorised to perform this action!");
-  }
 
   const { bookingId } = req.params;
   const { status } = req.body;
@@ -372,9 +354,6 @@ export const updateBookingStatus = asyncHandler(async (req, res) => {
  * @access  Private (Service Provider only)
  */
 export const uploadImages = asyncHandler(async (req, res) => {
-  if (req.user.role !== "provider") {
-    throw new ApiError(403, "You are not authorised to perform this action!");
-  }
 
   const { bookingId } = req.params;
 

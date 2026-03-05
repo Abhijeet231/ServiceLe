@@ -76,7 +76,7 @@ export const getProviderReviews = asyncHandler(async (req,res)=>{
 
 
 /**
- * @desc    Get Reviews for Individual Customer
+ * @desc    Get Reviews made by Individual Customer
  * @route   POST /api/v1/reviews/me
  * @access  Private (Customer only)
  */

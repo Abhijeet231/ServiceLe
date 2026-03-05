@@ -144,9 +144,6 @@ export const getProviderProfileDetails = asyncHandler(async (req, res) => {
  * @access  Private (provider only)
  */
 export const toggleAvailabilityStatus = asyncHandler(async (req, res) => {
-  if (req.user.role !== "provider") {
-    throw new ApiError(403, "You are not authorised to perform this action!");
-  }
 
   const provider = await ProviderProfile.findOne({ userId: req.user._id });
   if (!provider) {

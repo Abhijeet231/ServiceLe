@@ -9,9 +9,6 @@ import ProviderProfile from "../models/providerProfile.model.js";
  * @access  Private (admin only)
  */
 export const getPendingProviders = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") {
-    throw new ApiError(403, "You are not authorised to perform this action.");
-  }
 
   const providers = await ProviderProfile.find({
     status: "pending",
@@ -33,9 +30,7 @@ export const getPendingProviders = asyncHandler(async (req, res) => {
  * @access  Private (admin only)
  */
 export const approveProvider = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") {
-    throw new ApiError(403, "Only admin can approve providers");
-  }
+  
   const { providerId } = req.params;
 
   const provider = await ProviderProfile.findById(providerId);
@@ -63,10 +58,7 @@ export const approveProvider = asyncHandler(async (req, res) => {
  * @access  Private (admin only)
  */
 export const rejectProvider = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") {
-    throw new ApiError(403, "Only admin can reject providers");
-  }
-
+  
   const { providerId } = req.params;
 
   const provider = await ProviderProfile.findById(providerId);

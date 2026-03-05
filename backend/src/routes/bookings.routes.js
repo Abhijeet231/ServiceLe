@@ -11,31 +11,33 @@ import {
   getMyBookings,
 } from "../controllers/booking.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
+import { verifyRoles } from "../middleware/verifyRoles.js";
 
 const router = Router();
 
 // Create new booking
-router.post("/", verifyJWT, createBooking);
+router.post("/", verifyJWT, verifyRoles("customer"), createBooking);
 
 // Cancel booking
-router.patch("/:bookingId/cancel", verifyJWT, cancelBooking);
+router.patch("/:bookingId/cancel", verifyJWT, verifyRoles("customer"), cancelBooking);
 
 // Reschdule booking
-router.patch("/:bookingId/reschedule", verifyJWT, rescheduleBooking);
+router.patch("/:bookingId/reschedule", verifyJWT, verifyRoles("customer"), rescheduleBooking);
 
 // Accept a booking (provider only)
-router.patch("/:bookingId/accept", verifyJWT, acceptBookingRequest);
+router.patch("/:bookingId/accept", verifyJWT, verifyRoles("provider"), acceptBookingRequest);
 
 // Reject a booking (provider only)
-router.patch("/:bookingId/reject", verifyJWT, rejectBookingRequest);
+router.patch("/:bookingId/reject", verifyJWT, verifyRoles("provider"), rejectBookingRequest);
 
 //Update Booking status (provider only)
-router.patch("/:bookingId/status", verifyJWT, updateBookingStatus);
+router.patch("/:bookingId/status", verifyJWT, verifyRoles("provider"), updateBookingStatus);
 
 // Upload Before/After Images
 router.patch(
   "/:bookingId/uploadWorkImgs",
   verifyJWT,
+  verifyRoles("provider"),
   upload.fields([
     { name: "beforeImages", maxCount: 3 },
     { name: "afterImages", maxCount: 3 },

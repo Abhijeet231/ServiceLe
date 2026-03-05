@@ -11,9 +11,6 @@ import Service from "../models/service.model.js";
  * @access  Private (admin only)
  */
 export const createCategory = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") {
-    throw new ApiError(403, "Only admin can create Categories!");
-  }
 
   const { name } = req.body;
 
@@ -88,9 +85,6 @@ export const getIndividualCategory = asyncHandler(async (req, res) => {
  * @access  Private (admin only)
  */
 export const deleteCategory = asyncHandler(async (req, res) => {
-  if (req.user?.role !== "admin") {
-    throw new ApiError(403, "Only Admin can perform this action!");
-  }
 
   const { categoryId } = req.params;
 
