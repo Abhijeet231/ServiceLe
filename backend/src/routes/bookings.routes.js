@@ -1,13 +1,21 @@
-import {Router} from "express";
+import { Router } from "express";
 import verifyJWT from "../middleware/auth.middleware.js";
-import { createBooking, cancelBooking, rescheduleBooking, acceptBookingRequest, rejectBookingRequest, updateBookingStatus, uploadImages, getMyBookings } from "../controllers/booking.controller.js";
+import {
+  createBooking,
+  cancelBooking,
+  rescheduleBooking,
+  acceptBookingRequest,
+  rejectBookingRequest,
+  updateBookingStatus,
+  uploadImages,
+  getMyBookings,
+} from "../controllers/booking.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
-
 
 const router = Router();
 
 // Create new booking
-router.post("/",verifyJWT, createBooking);
+router.post("/", verifyJWT, createBooking);
 
 // Cancel booking
 router.patch("/:bookingId/cancel", verifyJWT, cancelBooking);
@@ -16,10 +24,10 @@ router.patch("/:bookingId/cancel", verifyJWT, cancelBooking);
 router.patch("/:bookingId/reschedule", verifyJWT, rescheduleBooking);
 
 // Accept a booking (provider only)
-router.patch("/:bookingId/accept",verifyJWT, acceptBookingRequest);
+router.patch("/:bookingId/accept", verifyJWT, acceptBookingRequest);
 
 // Reject a booking (provider only)
-router.patch("/:bookingId/reject", verifyJWT, rejectBookingRequest)
+router.patch("/:bookingId/reject", verifyJWT, rejectBookingRequest);
 
 //Update Booking status (provider only)
 router.patch("/:bookingId/status", verifyJWT, updateBookingStatus);
@@ -30,13 +38,12 @@ router.patch(
   verifyJWT,
   upload.fields([
     { name: "beforeImages", maxCount: 3 },
-    { name: "afterImages", maxCount: 3 }
+    { name: "afterImages", maxCount: 3 },
   ]),
-  uploadImages
+  uploadImages,
 );
 
 // Get Bookings for Current User
 router.get("/my", verifyJWT, getMyBookings);
-
 
 export default router;
