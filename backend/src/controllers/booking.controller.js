@@ -4,6 +4,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import Booking from "../models/booking.model.js";
 import Service from "../models/service.model.js";
 import ProviderProfile from "../models/providerProfile.model.js";
+import {
+  uploadOnCloudinary,
+  deleteFromCloudinary,
+} from "../utils/cloudinary.js";
 
 // ******************************************************** CUSTOMER BOOKING LOGIC ***************************************************************************//
 
@@ -331,6 +335,23 @@ export const updateBookingStatus = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Service must be in-progress before completing");
   }
 
+  // Require images before completing the job
+  if (status === "completed") {
+    if (booking.beforeImages.length === 0) {
+      throw new ApiError(
+        400,
+        "Upload at least one BEFORE work image before completing the booking",
+      );
+    }
+
+    if (booking.afterImages.length === 0) {
+      throw new ApiError(
+        400,
+        "Upload at least one AFTER work image before completing the booking",
+      );
+    }
+  }
+
   if (status === "in-progress") booking.startedAt = new Date();
   if (status === "completed") booking.completedAt = new Date();
 
@@ -350,6 +371,91 @@ export const updateBookingStatus = asyncHandler(async (req, res) => {
  * @route   PATCH /api/v1/bookings/:bookingId/uploadWorkImgs
  * @access  Private (Service Provider only)
  */
+export const uploadImages = asyncHandler(async (req, res) => {
+  if (req.user.role !== "provider") {
+    throw new ApiError(403, "You are not authorised to perform this action!");
+  }
+
+  const { bookingId } = req.params;
+
+  const booking = await Booking.findById(bookingId);
+
+  if (!booking) {
+    throw new ApiError(404, "Booking not found");
+  }
+
+  // find provider profile
+  const providerProfile = await ProviderProfile.findOne({
+    userId: req.user._id,
+  }).select("_id");
+
+  if (!providerProfile) {
+    throw new ApiError(404, "Provider profile not found");
+  }
+
+  // ownership check
+  if (booking.providerId.toString() !== providerProfile._id.toString()) {
+    throw new ApiError(403, "You are not allowed to perform this action");
+  }
+
+  // booking must be in-progress
+  if (booking.status !== "in-progress") {
+    throw new ApiError(
+      400,
+      "Images can only be uploaded when booking is in-progress",
+    );
+  }
+
+  const beforeImages = req.files?.beforeImages || [];
+  const afterImages = req.files?.afterImages || [];
+
+  if (beforeImages.length === 0 && afterImages.length === 0) {
+    throw new ApiError(400, "Please upload at least one image");
+  }
+
+  if (beforeImages.length === 0 && afterImages.length === 0) {
+    throw new ApiError(400, "Please upload at least one image");
+  }
+
+  // sequence rule
+  if (afterImages.length && booking.beforeImages.length === 0) {
+    throw new ApiError(400, "Upload BEFORE work images first!!");
+  }
+
+  // Upload BEFORE images
+  for (const file of beforeImages) {
+    const uploaded = await uploadOnCloudinary(file.path);
+
+    if (!uploaded) {
+      throw new ApiError(500, "Failed to upload before image");
+    }
+
+    booking.beforeImages.push({
+      url: uploaded.secure_url,
+      public_id: uploaded.public_id,
+    });
+  }
+
+  // Upload AFTER images
+  for (const file of afterImages) {
+    const uploaded = await uploadOnCloudinary(file.path);
+
+    if (!uploaded) {
+      throw new ApiError(500, "Failed to upload after image");
+    }
+
+    booking.afterImages.push({
+      url: uploaded.secure_url,
+      public_id: uploaded.public_id,
+    });
+  }
+
+  await booking.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, booking, "Images uploaded successfully"));
+});
 
 // ******************************************************** GET BOOKINGS FOR CURRENT USER ***************************************************************************//
 
