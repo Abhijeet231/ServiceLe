@@ -31,12 +31,11 @@ const bookingSchema = new Schema(
     },
     dateTime: {
       type: Date,
-      required: [true, "Service date & time is required!"],
+      required: [true, "Service date & time is required!"], //Note: time must be fututre- handle in zod validation. then dletetit
     },
     customerNotes: {
       type: String,
       trim: true,
-      required: [true, "Notes is required!"],
       maxlength: 1000,
     },
     price: {
@@ -51,10 +50,12 @@ const bookingSchema = new Schema(
     },
     cancelledBy: {
       type: String,
-      enum: ["customer", "provider"],
+      enum: ["customer", "provider", null],
+      default: null,
     },
     providerWorkNotes: {
       type: String,
+      trim: true,
       maxlength: 2000,
     },
     beforeImages: [
@@ -69,6 +70,12 @@ const bookingSchema = new Schema(
         public_id: { type: String },
       },
     ],
+    startedAt: {
+      type: Date
+    },
+    completedAt: {
+      type: Date
+    }
   },
   { timestamps: true },
 );
