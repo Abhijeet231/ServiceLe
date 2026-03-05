@@ -42,4 +42,8 @@ app.use("/api/v1/admin", adminRouter);
 import providerRouter from "./routes/providers.routes.js";
 app.use("/api/v1/providers", providerRouter);
 
+// Booking routes
+import bookingRouter from "./routes/bookings.routes.js"
+app.use("/api/v1/bookings", bookingRouter);
+
 export default app;

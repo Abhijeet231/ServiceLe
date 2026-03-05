@@ -464,3 +464,48 @@ export const uploadImages = asyncHandler(async (req, res) => {
  * @route   GET /api/v1/bookings/my
  * @access  Private (Customer / Service Provider)
  */
+export const getMyBookings = asyncHandler(async (req, res) => {
+
+  const userId = req.user._id;
+  const role = req.user.role;
+
+  let bookings = [];
+
+  // CUSTOMER BOOKINGS
+  if (role === "customer") {
+
+    bookings = await Booking.find({ customerId: userId })
+      .populate("serviceId")
+      .populate("providerId")
+      .sort({ createdAt: -1 });
+
+  }
+
+  // PROVIDER BOOKINGS
+  else if (role === "provider") {
+
+    const providerProfile = await ProviderProfile
+      .findOne({ userId })
+      .select("_id");
+
+    if (!providerProfile) {
+      throw new ApiError(404, "Provider profile not found");
+    }
+
+    bookings = await Booking.find({ providerId: providerProfile._id })
+      .populate("serviceId")
+      .populate("customerId", "name email")
+      .sort({ createdAt: -1 });
+
+  }
+
+  else {
+    throw new ApiError(403, "Invalid user role");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, bookings, "Bookings fetched successfully")
+  );
+
+});
+
