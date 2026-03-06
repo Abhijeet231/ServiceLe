@@ -3,9 +3,12 @@ import { createServices, getServicesByCategory, searchServices, serviceDetails, 
 const router = Router();
 import verifyJWT from "../middleware/auth.middleware.js";
 import { verifyRoles } from "../middleware/verifyRoles.js";
+import validate from "../middleware/validation.middleware.js";
+import { createServiceSchema } from "../validations/service.validation.js";
+
 
 // Create Services
-router.post("/categories/:categoryId/services",verifyJWT, verifyRoles("admin"), createServices)
+router.post("/categories/:categoryId/services",verifyJWT, verifyRoles("admin"),validate(createServiceSchema), createServices)
 
 //Get all Services Listed By Categories
 router.get("/categories/:categoryId/services", getServicesByCategory)

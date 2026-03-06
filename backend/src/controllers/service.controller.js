@@ -12,9 +12,7 @@ import Booking from "../models/booking.model.js";
  * @access  Private (admin only)
  */
 export const createServices = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") {
-    throw new ApiError(403, "Only admin can create services!");
-  }
+ 
 
   const { categoryId } = req.params;
   const { name, description, basePrice } = req.body;
@@ -123,9 +121,6 @@ export const serviceDetails = asyncHandler(async (req, res) => {
  * @access  Pirvate(admin only)
  */
 export const deleteService = asyncHandler(async (req, res) => {
-  if (req.user.role !== "admin") {
-    throw new ApiError(403, "You are not authorised to delete Service!!");
-  }
 
   const { serviceId } = req.params;
   const service = await Service.findById(serviceId);

@@ -12,17 +12,20 @@ import {
 } from "../controllers/booking.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { verifyRoles } from "../middleware/verifyRoles.js";
+import validate from "../middleware/validation.middleware.js";
+import { createBookingSchemaZod, rescheduleBookingSchemaZod, updateBookingStatusSchemaZod } from "../validations/booking.validation.js";
+
 
 const router = Router();
 
 // Create new booking
-router.post("/", verifyJWT, verifyRoles("customer"), createBooking);
+router.post("/", verifyJWT, verifyRoles("customer"),validate(createBookingSchemaZod) ,createBooking);
 
 // Cancel booking
 router.patch("/:bookingId/cancel", verifyJWT, verifyRoles("customer"), cancelBooking);
 
 // Reschdule booking
-router.patch("/:bookingId/reschedule", verifyJWT, verifyRoles("customer"), rescheduleBooking);
+router.patch("/:bookingId/reschedule", verifyJWT, verifyRoles("customer"),validate(rescheduleBookingSchemaZod) ,rescheduleBooking);
 
 // Accept a booking (provider only)
 router.patch("/:bookingId/accept", verifyJWT, verifyRoles("provider"), acceptBookingRequest);
@@ -31,7 +34,7 @@ router.patch("/:bookingId/accept", verifyJWT, verifyRoles("provider"), acceptBoo
 router.patch("/:bookingId/reject", verifyJWT, verifyRoles("provider"), rejectBookingRequest);
 
 //Update Booking status (provider only)
-router.patch("/:bookingId/status", verifyJWT, verifyRoles("provider"), updateBookingStatus);
+router.patch("/:bookingId/status", verifyJWT, verifyRoles("provider"), validate(updateBookingStatusSchemaZod), updateBookingStatus);
 
 // Upload Before/After Images
 router.patch(

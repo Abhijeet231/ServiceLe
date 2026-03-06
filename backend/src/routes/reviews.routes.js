@@ -7,11 +7,13 @@ import {
   deleteReview,
 } from "../controllers/review.controller.js";
 import { verifyRoles } from "../middleware/verifyRoles.js";
+import validate from "../middleware/validation.middleware.js";
+import { createReviewSchema } from "../validations/review.validation.js";
 
 const router = Router();
 
 // Create Review
-router.post("/reviews", verifyJWT, verifyRoles("customer"), createReview);
+router.post("/reviews", verifyJWT, verifyRoles("customer"), validate(createReviewSchema), createReview);
 
 // Get Reviews for Individual Provider
 router.get(
