@@ -16,7 +16,7 @@ const hashedPassword = await bcrypt.hash("admin444", 10)
 
 await User.create({
     name: "BigBoss",
-    email:"bigboss01@serviceLe.com",
+    email: "bigboss01@servicele.com",
     password: hashedPassword,
     city: "Bangalore",
     role: "admin"

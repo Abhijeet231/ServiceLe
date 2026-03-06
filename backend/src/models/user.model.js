@@ -40,17 +40,16 @@ const userSchema = new Schema ({
 
 
 // Password Hashing
-userSchema.pre("save", async function () {
-    if(!this.isModified("password")) return;
+userSchema.pre("save",  function () {
+    if (!this.isModified("password")) return;
 
-    this.password = await bcrypt.hash(this.password, 9);
-})
+    this.password =  bcrypt.hash(this.password, 10);
+});
 
 // Checking Password
 userSchema.methods.isPasswordCorrect = async function(password) {
-   return await bcrypt.compare(password, this.password)
+   return bcrypt.compare(password, this.password);
 };
-
 
 //MODEL
 const User = mongoose.model("User", userSchema);

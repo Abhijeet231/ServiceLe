@@ -56,7 +56,6 @@ const providerProfileSchema = new Schema({
 
 //INDEXING
 providerProfileSchema.index({ categoryId: 1 });
-providerProfileSchema.index({ userId: 1 });
 providerProfileSchema.index({
   status: 1,
   availabilityStatus: 1,

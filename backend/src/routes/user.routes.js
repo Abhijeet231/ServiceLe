@@ -12,7 +12,7 @@ const router = Router();
 router.get("/",verifyJWT, getLoggedInUser )
 
 // Update User Profile
-router.patch("/",verifyJWT, updateUserProfile)
+router.patch("/",verifyJWT,validate(updateUserProfileSchema), updateUserProfile)
 
 
 
