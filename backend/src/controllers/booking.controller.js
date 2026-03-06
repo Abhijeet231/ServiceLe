@@ -22,23 +22,32 @@ export const createBooking = asyncHandler(async (req, res) => {
   const customerId = req.user._id;
 
   // Finding and checking if service is there or not
-  const service = await Service.findById(serviceId).populate("providerId");
+  const service = await Service.findById(serviceId).populate("categoryId");
 
   if (!service) {
     throw new ApiError(404, "Service not found");
   }
 
-  const providerId = service.providerId._id;
+  const provider = await ProviderProfile.findOne({
+    serviceIds: serviceId,
+    status: "approved"
+  });
+
+  if(!provider){
+    throw new ApiError(404, "No Provider Available for this service")
+  }
+
+  const providerId = provider._id;
 
   const price = service.basePrice;
 
   // Checking Duplicate Booking
-  const existingBooking = await Booking.findOne({
-    customerId,
-    serviceId,
-    status: { $ne: "cancelled" },
-  });
-
+const existingBooking = await Booking.findOne({
+  customerId,
+  serviceId,
+  dateTime,
+  status: { $ne: "cancelled" },
+});
   if (existingBooking) {
     throw new ApiError(400, "You already booked this service!!");
   }

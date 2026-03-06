@@ -27,6 +27,10 @@ export const createProviderProfile = asyncHandler(async (req, res) => {
     experienceYears,
   });
 
+  // change user role to provider
+  await User.findByIdAndUpdate(userId, { role: "provider" });
+
+
   return res
     .status(201)
     .json(

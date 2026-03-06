@@ -9,10 +9,10 @@ const router = Router();
 router.get("/providers/pending", verifyJWT, verifyRoles("admin"), getPendingProviders )
 
 // Approve Provider
-router.patch("providers/:providerId/approve", verifyJWT,verifyRoles("admin"), approveProvider)
+router.patch("/providers/:providerId/approve", verifyJWT,verifyRoles("admin"), approveProvider)
 
 // Reject Provider
-router.patch("/providers/:providerId", verifyJWT, verifyRoles("admin"), rejectProvider)
+router.patch("/providers/:providerId/reject", verifyJWT, verifyRoles("admin"), rejectProvider)
 
 
 export default router;
