@@ -27,7 +27,7 @@ const Landing = () => {
           </Link>
 
           <Link
-            to="/become-provider"
+            to="/customer/become-provider"
             className="border border-gray-300 px-6 py-3 rounded-md font-medium hover:border-amber-500 hover:text-amber-500 transition"
           >
             Become a Provider

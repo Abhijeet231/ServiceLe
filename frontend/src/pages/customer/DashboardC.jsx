@@ -2,7 +2,9 @@ import React from 'react'
 
 const DashboardC = () => {
   return (
-    <div>Dashboard</div>
+    <div>
+      Dashboard for Customer
+    </div>
   )
 }
 

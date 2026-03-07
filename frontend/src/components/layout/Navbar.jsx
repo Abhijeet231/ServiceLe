@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext.jsx";
+import { logout } from "@/services/auth.service.js";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const {status} = useAuth();
+
 
   return (
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-200">
@@ -17,7 +21,7 @@ const Navbar = () => {
 
           <span className="text-lg font-semibold tracking-tight">
             <span className="text-gray-900">Service</span>
-            <span className="text-amber-500">LE</span>
+            <span className="text-amber-500">Le</span>
           </span>
         </Link>
 
@@ -39,10 +43,27 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Buttons */}
-        <div className="hidden md:flex items-center gap-4">
-          <Link
+        <div >
+          {status === "authenticated" ? 
+          <div className="hidden md:flex items-center gap-4">
+          <button
+           onClick={() => logout()}
+           className="border  px-4 py-1.5 rounded-md font-medium border-amber-500 text-amber-600  hover:border-gray-300 hover:bg-amber-600 hover:text-white transition-all "
+          >Logout</button>
+
+          <Link 
+          to= "/customer/dashboard"
+           className="bg-amber-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-amber-600 transition"
+          >
+            DashBoard
+          </Link>
+          </div>
+          
+          : 
+          <div className="hidden md:flex items-center gap-4">
+            <Link
             to="/login"
-            className="text-gray-700 hover:text-gray-900 transition-colors"
+             className="border border-gray-300 px-4 py-1.5 rounded-md font-medium hover:border-amber-500 hover:text-amber-500 transition"
           >
             Login
           </Link>
@@ -53,6 +74,8 @@ const Navbar = () => {
           >
             Register
           </Link>
+          </div>
+        }
         </div>
 
         {/* Mobile Hamburger */}

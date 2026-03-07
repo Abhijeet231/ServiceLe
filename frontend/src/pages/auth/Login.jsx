@@ -4,11 +4,13 @@ import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/validations/authSchema.js";
-import { login as loginUser } from "@/services/auth.service.js";
+import { useAuth } from "@/context/AuthContext.jsx";
+
 import { Mail, Lock } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
+  const {login} = useAuth();
 
   const {
     register,
@@ -20,7 +22,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const result = await loginUser(data);
+      const result = await login(data);
       toast.success("Login successful!");
       console.log("Logged in user:", result.data);
 

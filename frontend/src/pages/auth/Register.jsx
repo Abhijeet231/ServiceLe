@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/validations/authSchema.js";
-import { register as registerUser } from "@/services/auth.service.js";
+import { login, register as registerUser } from "@/services/auth.service.js";
 import { User, Mail, Lock, MapPin } from "lucide-react";
 
 const Register = () => {
@@ -18,12 +18,17 @@ const Register = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = async (data) => {
+  const onSubmitt = async (data) => {
     try {
       const result = await registerUser(data);
+
+      // Immediate login flow 
+      await login(data);
+      
       toast.success("User Registered Successfully.");
       console.log("Registered User:", result.data);
       navigate("/customer/dashboard");
+
     } catch (error) {
       toast.error("User registration Error!");
       console.log("User Registration Error:", error);
@@ -44,7 +49,7 @@ const Register = () => {
 
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl border-2 border-amber-200 p-8 hover:shadow-2xl transition-all duration-300">
-          <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-5" onSubmit={handleSubmit(onSubmitt)}>
 
             {/* Name */}
             <div>
