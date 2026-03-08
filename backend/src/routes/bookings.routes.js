@@ -9,6 +9,7 @@ import {
   updateBookingStatus,
   uploadImages,
   getMyBookings,
+  getBookingDetails,
 } from "../controllers/booking.controller.js";
 import { upload } from "../middleware/multer.middleware.js";
 import { verifyRoles } from "../middleware/verifyRoles.js";
@@ -50,5 +51,9 @@ router.patch(
 
 // Get Bookings for Current User
 router.get("/my", verifyJWT, getMyBookings);
+
+
+// Get Booking details
+router.get("/:bookingId", verifyJWT, getBookingDetails);
 
 export default router;

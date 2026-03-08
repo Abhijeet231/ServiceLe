@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext.jsx";
-import { logout } from "@/services/auth.service.js";
+
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const {status} = useAuth();
+  const {status, logout} = useAuth();
 
 
   return (

@@ -39,3 +39,8 @@ export const uploadWorkImgs = (credentials) => {
 export const getMyBookings = () => {
     return api.get("/api/v1/bookings/my");
 }
+
+// Get Individual Booking
+export const getBookingDetails = (credentials) => {
+    return api.get(`/api/v1/bookings/${credentials}`)
+}

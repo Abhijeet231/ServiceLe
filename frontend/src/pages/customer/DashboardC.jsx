@@ -3,24 +3,18 @@ import { useAuth } from "@/context/AuthContext.jsx";
 import { getMyBookings } from "@/services/booking.service.js";
 import { toast } from "react-toastify";
 import { BookingCard } from "@/components/customer/BookingCard";
-
-const STATUS_STYLES = {
-  pending: "bg-amber-50 text-amber-600 border border-amber-200",
-  confirmed: "bg-emerald-50 text-emerald-600 border border-emerald-200",
-  cancelled: "bg-red-50 text-red-500 border border-red-200",
-};
-
-const STATUS_DOT = {
-  Pending: "bg-amber-400",
-  Confirmed: "bg-emerald-400",
-  Cancelled: "bg-red-400",
-};
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { getMe } from "@/services/customer.service";
 
 export default function DashboardC() {
   const [deleteHover, setDeleteHover] = useState(false);
   const [bookings, setBookings] = useState([]);
-  const { user } = useAuth();
 
+  const { user} = useAuth();
+  const navigate = useNavigate();
+
+  // Fetching bookings
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -34,6 +28,7 @@ export default function DashboardC() {
     };
     fetchBookings();
   }, []);
+
 
   console.log("bookings:", bookings);
   return (
@@ -72,7 +67,7 @@ export default function DashboardC() {
                     style={{ fontFamily: "'DM Serif Display', serif" }}
                     className="text-white text-xl"
                   >
-                    {user.name.at(0)}
+                    {user.name?.at(0)}
                   </span>
                 </div>
               </div>
@@ -113,7 +108,10 @@ export default function DashboardC() {
 
               {/* Action buttons */}
               <div className="flex flex-col gap-2.5">
-                <button className="w-full py-2.5 rounded-xl bg-stone-800 text-white text-sm font-medium hover:bg-stone-700 transition-colors duration-200">
+                <button
+                  onClick={() => navigate("/customer/profile")}
+                  className="w-full py-2.5 rounded-xl bg-stone-800 text-white text-sm font-medium hover:bg-stone-700 transition-colors duration-200"
+                >
                   Edit Profile
                 </button>
                 <button
@@ -156,18 +154,23 @@ export default function DashboardC() {
                   </p>
                 </div>
                 <h3
+               
                   style={{ fontFamily: "'DM Serif Display', serif" }}
                   className="text-2xl text-white mb-2"
                 >
                   Become a Service Provider
                 </h3>
-                <p className="text-stone-400 text-sm leading-relaxed max-w-xs">
+                <p 
+                
+                className="text-stone-400 text-sm leading-relaxed max-w-xs">
                   Create a provider profile to start offering your services and
                   reach customers in your area.
                 </p>
               </div>
               <div className="shrink-0">
-                <button className="whitespace-nowrap px-5 py-3 rounded-xl bg-amber-400 text-stone-900 text-sm font-semibold hover:bg-amber-300 transition-colors duration-200 shadow-lg shadow-amber-900/20">
+                <button 
+                 onClick={() => navigate("/customer/become-provider")}
+                className="whitespace-nowrap px-5 py-3 rounded-xl bg-amber-400 text-stone-900 text-sm font-semibold hover:bg-amber-300 transition-colors duration-200 shadow-lg shadow-amber-900/20">
                   Create Provider Profile
                 </button>
               </div>
@@ -220,6 +223,7 @@ export default function DashboardC() {
                   status={booking.status}
                   city={booking.city}
                   address={booking.address}
+                  onClick = {() => navigate(`/customer/bookings/${booking._id}`)}
                 />
               ))
             )}

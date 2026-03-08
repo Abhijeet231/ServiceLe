@@ -24,14 +24,16 @@ const STATUS_LABEL = {
   cancelled: "Cancelled",
 };
 
-export function BookingCard({ service, status, city, address }) {
+export function BookingCard({ service, status, city, address, onClick }) {
 
   const style = STATUS_STYLES[status] || STATUS_STYLES["requested"];
   const dot = STATUS_DOT[status] || STATUS_DOT["requested"];
   const label = STATUS_LABEL[status] || "Pending";
 
   return (
-    <div className="w-full rounded-lg shadow-sm border border-stone-100 p-5 flex flex-col gap-4 overflow-hidden mb-5 bg-amber-50/40">
+    <div 
+     onClick={onClick}
+    className="w-full rounded-lg shadow-sm border border-stone-100 p-5 flex flex-col gap-4 overflow-hidden mb-5 bg-amber-50/40 cursor-pointer">
 
       {/* Top Row */}
       <div className="flex items-start justify-between gap-4">

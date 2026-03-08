@@ -62,8 +62,8 @@ const router = createBrowserRouter([
               {
                 path: "customer",
                 children: [
-                  { path: "dashboard", element: <DashboardC /> },
-                  { path: "bookings", element: <BookingsC /> },
+                  { path: "dashboard", element: <DashboardC />},
+                  { path: "bookings/:bookingId", element: <BookingsC /> },
                   { path: "profile", element: <ProfileC /> },
                   { path: "become-provider", element: <BecomeProvider /> },
                 ],

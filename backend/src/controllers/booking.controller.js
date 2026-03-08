@@ -497,3 +497,17 @@ export const getMyBookings = asyncHandler(async (req, res) => {
 
 });
 
+// Get Individual Booking
+export const getBookingDetails = asyncHandler(async(req,res) => {
+
+  const { bookingId } = req.params;
+
+  const booking = await Booking.findById(bookingId);
+
+  if(!booking){
+    throw new ApiError(404, "Booking details not found")
+  };
+
+  return res.status(200).json(new ApiResponse(200, booking, "Booking details fetched successfully"));
+
+})
