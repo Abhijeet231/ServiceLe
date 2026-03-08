@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import ProviderProfile from "../models/providerProfile.model.js";
 import { validateServicesForCategory } from "../utils/validateServiceForCategory.js";
+import User from "../models/user.model.js";
 
 /**
  * @desc    Create Provider Profile
@@ -14,9 +15,18 @@ export const createProviderProfile = asyncHandler(async (req, res) => {
   const { categoryId, serviceIds, bio, experienceYears } = req.body;
 
   const existingProfile = await ProviderProfile.findOne({ userId });
-
   if (existingProfile) {
-    throw new ApiError(400, "Provider profile already exists");
+    await User.findByIdAndUpdate(userId, { role: "provider" });
+
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          existingProfile,
+          "Provider profile already exists",
+        ),
+      );
   }
 
   const provider = await ProviderProfile.create({
@@ -30,15 +40,12 @@ export const createProviderProfile = asyncHandler(async (req, res) => {
   // change user role to provider
   await User.findByIdAndUpdate(userId, { role: "provider" });
 
-
   return res
     .status(201)
     .json(
       new ApiResponse(201, provider, "Provider profile created successfully."),
     );
 });
-
-
 
 /**
  * @desc    Update Provider Profile
@@ -80,12 +87,10 @@ export const updateProviderProfile = asyncHandler(async (req, res) => {
     );
 });
 
-
-
 /**
  * @desc    Get all approved Providers profile
  * @route   POST /api/v1/providers
- * @access  Public 
+ * @access  Public
  **/
 export const getAllProvidersProfile = asyncHandler(async (req, res) => {
   const providers = await ProviderProfile.find({
@@ -112,8 +117,6 @@ export const getAllProvidersProfile = asyncHandler(async (req, res) => {
     );
 });
 
-
-
 /**
  * @desc    Get Single Provider Profile
  * @route   POST /api/v1/providers/:providerId
@@ -139,16 +142,12 @@ export const getProviderProfileDetails = asyncHandler(async (req, res) => {
     );
 });
 
-
-
-
 /**
  * @desc    Toggle Availability status
  * @route   POST /api/v1/providers/availability
  * @access  Private (provider only)
  */
 export const toggleAvailabilityStatus = asyncHandler(async (req, res) => {
-
   const provider = await ProviderProfile.findOne({ userId: req.user._id });
   if (!provider) {
     throw new ApiError(400, "Service Provider Profile Not Found!");
@@ -169,4 +168,3 @@ export const toggleAvailabilityStatus = asyncHandler(async (req, res) => {
       ),
     );
 });
-

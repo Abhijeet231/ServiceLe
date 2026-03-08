@@ -14,7 +14,7 @@ const Landing = () => {
 
         <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
           ServiceLE helps you connect with reliable professionals for everyday
-          services — from electricians and plumbers to cleaners and repairs.
+          services - from electricians and plumbers to cleaners and repairs.
         </p>
 
         <div className="mt-8 flex justify-center gap-4 flex-wrap">

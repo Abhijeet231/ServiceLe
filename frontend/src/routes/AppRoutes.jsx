@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "@/App";
 
-
 // Pages
 import Register from "@/pages/auth/Register.jsx";
 import Login from "@/pages/auth/Login.jsx";
@@ -17,7 +16,7 @@ import BookingsC from "@/pages/customer/BookingsC.jsx";
 import BecomeProvider from "@/pages/customer/BecomeProvider.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 
-// Provider 
+// Provider
 import BookingsP from "@/pages/provider/BookingsP.jsx";
 import DashboardP from "@/pages/provider/DashboardP.jsx";
 import ProfileP from "@/pages/provider/ProfileP.jsx";
@@ -26,21 +25,14 @@ import ProfileP from "@/pages/provider/ProfileP.jsx";
 import Dashboard from "@/pages/admin/Dashboard.jsx";
 import Providers from "@/pages/admin/Providers.jsx";
 
+// Role Wise Access
+import CustomerOnlyRoutes from "./CustomerOnlyRoutes.jsx";
+import AdminOnlyRoute from "./AdminOnlyRoute.jsx";
+import ProviderOnlyRoute from "./ProviderOnly.jsx";
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App/>,
-        children: [
-            //Public
-            {index: true, element: <Landing/>},
-            {path:"about", element:<About/>},
-            {path:"services", element:<BrowseServices/>},
-            {path:"services/:serviceId", element:<ServiceDetails/>},
-        ]
-    },
-    // Auth Pages 
-      {
+  // Auth Pages
+  {
     path: "/login",
     element: <Login />,
   },
@@ -48,37 +40,69 @@ const router = createBrowserRouter([
     path: "/register",
     element: <Register />,
   },
-    {
-    element: <ProtectedRoute />,
+  // Main Layout
+  {
+    path: "/",
+    element: <App />,
     children: [
-      {
-      path: "/customer",
-      children: [
-        { path: "dashboard", element: <DashboardC /> },
-        { path: "bookings", element: <BookingsC /> },
-        { path: "profile", element: <ProfileC /> },
-        { path: "become-provider", element: <BecomeProvider /> }
-      ]
-    },
-    {
-        path: "/provider",
-        children: [
-            {path:"dashboard", element: <DashboardP/>},
-            {path:"bookings", element: <BookingsP/>},
-            {path:"profile", element: <ProfileP/>},
+      //Public
+      { index: true, element: <Landing /> },
+      { path: "about", element: <About /> },
+      { path: "services", element: <BrowseServices /> },
+      { path: "services/:serviceId", element: <ServiceDetails /> },
 
-        ]
-    },
-    {
-        path: "/admin",
+      // Protected Pages
+      {
+        element: <ProtectedRoute />,
         children: [
-            {path: "dashboard", element: <Dashboard/>},
-            {path:"providers", element: <Providers/>}
-        ]
-    }
+          // CUSTOMER
+          {
+            element: <CustomerOnlyRoutes />,
+            children: [
+              {
+                path: "customer",
+                children: [
+                  { path: "dashboard", element: <DashboardC /> },
+                  { path: "bookings", element: <BookingsC /> },
+                  { path: "profile", element: <ProfileC /> },
+                  { path: "become-provider", element: <BecomeProvider /> },
+                ],
+              },
+            ],
+          },
+
+          // PROVIDER
+          {
+            element: <ProviderOnlyRoute />,
+            children: [
+              {
+                path: "provider",
+                children: [
+                  { path: "dashboard", element: <DashboardP /> },
+                  { path: "bookings", element: <BookingsP /> },
+                  { path: "profile", element: <ProfileP /> },
+                ],
+              },
+            ],
+          },
+
+          // ADMIN
+          {
+            element: <AdminOnlyRoute />,
+            children: [
+              {
+                path: "admin",
+                children: [
+                  { path: "dashboard", element: <Dashboard /> },
+                  { path: "providers", element: <Providers /> },
+                ],
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
 ]);
-
 
 export default router;

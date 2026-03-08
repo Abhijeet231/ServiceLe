@@ -1,11 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext.jsx";
+import { getMyBookings } from "@/services/booking.service.js";
+import { toast } from "react-toastify";
+import { BookingCard } from "@/components/customer/BookingCard";
 
+const STATUS_STYLES = {
+  pending: "bg-amber-50 text-amber-600 border border-amber-200",
+  confirmed: "bg-emerald-50 text-emerald-600 border border-emerald-200",
+  cancelled: "bg-red-50 text-red-500 border border-red-200",
+};
+
+const STATUS_DOT = {
+  Pending: "bg-amber-400",
+  Confirmed: "bg-emerald-400",
+  Cancelled: "bg-red-400",
+};
 
 export default function DashboardC() {
   const [deleteHover, setDeleteHover] = useState(false);
-  const {user} = useAuth();
+  const [bookings, setBookings] = useState([]);
+  const { user } = useAuth();
 
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const res = await getMyBookings();
+        setBookings(res.data.data);
+        console.log("Customer Bookings:", res.data);
+      } catch (error) {
+        toast.error("Error While Fetching Bookings!");
+        console.log("Error While Fetching Bookings for Customer:", error);
+      }
+    };
+    fetchBookings();
+  }, []);
+
+  console.log("bookings:", bookings);
   return (
     <div
       style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -31,11 +61,9 @@ export default function DashboardC() {
 
       {/* Main Layout */}
       <div className="flex flex-col lg:flex-row gap-6 items-start">
-
         {/* ── LEFT: Profile Card (40%) ── */}
         <div className="w-full lg:w-2/5">
           <div className="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden">
-
             {/* Card top band */}
             <div className="h-24 bg-linear-to-br from-amber-50 to-orange-100 relative">
               <div className="absolute -bottom-8 left-6">
@@ -106,7 +134,6 @@ export default function DashboardC() {
 
         {/* ── RIGHT: Main Dashboard (60%) ── */}
         <div className="w-full lg:w-3/5 flex flex-col gap-6">
-
           {/* CTA Card */}
           <div className="relative overflow-hidden bg-stone-800 rounded-2xl p-8 shadow-sm">
             {/* Decorative circles */}
@@ -117,7 +144,10 @@ export default function DashboardC() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="w-6 h-6 rounded-lg bg-amber-400 flex items-center justify-center">
-                    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-none stroke-stone-900 stroke-2">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-3.5 h-3.5 fill-none stroke-stone-900 stroke-2"
+                    >
                       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                     </svg>
                   </span>
@@ -155,32 +185,45 @@ export default function DashboardC() {
                 </h3>
               </div>
               <span className="text-xs text-stone-400 bg-stone-50 border border-stone-100 px-2.5 py-1 rounded-full">
-                0 active
+                {bookings.length === 0
+                  ? " 0 active"
+                  : `${bookings.length} active `}
               </span>
             </div>
 
-            {/* Empty state placeholder */}
-            <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-stone-50 border border-stone-100 flex items-center justify-center mb-4">
-                <svg
-                  viewBox="0 0 24 24"
-                  className="w-6 h-6 stroke-stone-300 fill-none stroke-2"
-                >
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                  <line x1="16" y1="2" x2="16" y2="6" />
-                  <line x1="8" y1="2" x2="8" y2="6" />
-                  <line x1="3" y1="10" x2="21" y2="10" />
-                </svg>
+            {bookings.length === 0 ? (
+              /* Empty state */
+              <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+                <div className="w-14 h-14 rounded-2xl bg-stone-50 border border-stone-100 flex items-center justify-center mb-4">
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="w-6 h-6 stroke-stone-300 fill-none stroke-2"
+                  >
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                  </svg>
+                </div>
+                <p className="text-sm font-medium text-stone-400">
+                  No bookings yet
+                </p>
+                <p className="text-xs text-stone-300 mt-1">
+                  Your active bookings will appear here
+                </p>
               </div>
-              <p className="text-sm font-medium text-stone-400">
-                No bookings yet
-              </p>
-              <p className="text-xs text-stone-300 mt-1">
-                Your active bookings will appear here
-              </p>
-            </div>
+            ) : (
+              bookings.map((booking) => (
+                <BookingCard
+                  key={booking._id}
+                  service={booking.serviceId?.name}
+                  status={booking.status}
+                  city={booking.city}
+                  address={booking.address}
+                />
+              ))
+            )}
           </div>
-
         </div>
       </div>
     </div>
