@@ -35,3 +35,7 @@ export const createBookingSchema = z.object({
     .max(1000, "Notes must be less than 1000 characters")
     .optional(),
 });
+
+export const rescheduleBookingSchema = z.object({
+  dateTime: futureDate,
+});
