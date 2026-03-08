@@ -401,9 +401,6 @@ export const uploadImages = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Please upload at least one image");
   }
 
-  if (beforeImages.length === 0 && afterImages.length === 0) {
-    throw new ApiError(400, "Please upload at least one image");
-  }
 
   // sequence rule
   if (afterImages.length && booking.beforeImages.length === 0) {

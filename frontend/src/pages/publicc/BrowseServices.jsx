@@ -5,12 +5,15 @@ import {
   searchServices,
 } from "@/services/service.service";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BrowseServices = () => {
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const navigate = useNavigate();
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -271,7 +274,7 @@ const BrowseServices = () => {
                     hover:-translate-y-0.5 transition-all duration-200 overflow-hidden cursor-pointer"
                 >
                   {/* Card top accent */}
-                  <div className="h-0.5 w-full bg-gradient-to-r from-amber-300 to-orange-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                  <div className="h-0.5 w-full bg-linear-to-r from-amber-300 to-orange-300 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
 
                   <div className="p-5">
                     {/* Category badge */}
@@ -295,7 +298,12 @@ const BrowseServices = () => {
 
                     {/* Footer */}
                     <div className="flex items-center justify-end mt-4">
-                      <span className="flex items-center gap-1 text-xs text-amber-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      <span
+                        onClick={() => navigate("/customer/bookService", {
+                          state: { service: svc },
+                        })}
+                        className="flex items-center gap-1 text-xs text-amber-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      >
                         View details
                         <svg
                           viewBox="0 0 24 24"

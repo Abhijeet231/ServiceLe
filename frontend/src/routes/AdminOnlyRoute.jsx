@@ -14,9 +14,9 @@ const AdminOnlyRoute = () => {
         return <Navigate to= "/login" replace/>
     }
 
-  if(user.role !== "admin") {
-    return <Navigate to= "/" replace/>
-  }
+  if (user.role !== "admin") {
+  return <Navigate to={`/${user.role}/dashboard`} replace />
+}
 
   return <Outlet/>
 }

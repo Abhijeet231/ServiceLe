@@ -14,9 +14,9 @@ const ProviderOnlyRoute = () => {
         return <Navigate to= "/login" replace/>
     }
 
-  if(user.role !== "provider") {
-    return <Navigate to= "/" replace/>
-  }
+if (user.role !== "provider") {
+  return <Navigate to={`/${user.role}/dashboard`} replace />
+}
 
   return <Outlet/>
 }

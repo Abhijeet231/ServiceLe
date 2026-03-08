@@ -123,23 +123,21 @@ export const getAllProvidersProfile = asyncHandler(async (req, res) => {
  * @access  publiC
  */
 export const getProviderProfileDetails = asyncHandler(async (req, res) => {
-  const { providerId } = req.params;
-
-  const provider = await ProviderProfile.findById(providerId)
+  const provider = await ProviderProfile.findOne({
+    userId: req.user._id
+  })
     .populate("userId", "name email city")
     .populate("categoryId", "name")
     .populate("serviceIds", "name description basePrice")
     .lean();
 
   if (!provider) {
-    throw new ApiError(404, "Provider not found");
+    throw new ApiError(404, "Provider profile not found");
   }
 
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(200, provider, "Provider Details Fetched Successfully!"),
-    );
+  return res.status(200).json(
+    new ApiResponse(200, provider, "Provider Profile fetched successfully")
+  );
 });
 
 /**

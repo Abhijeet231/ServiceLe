@@ -1,20 +1,18 @@
 import { z } from "zod";
 
 // reusable ObjectId validator
-const objectId = z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ObjectId");
+const objectId = z
+  .string()
+  .regex(/^[0-9a-fA-F]{24}$/, "Invalid service id");
 
 // future date validator
 const futureDate = z
   .string()
-  .refine((date) => !isNaN(new Date(date).getTime()), {
-    message: "Invalid date format",
-  })
   .refine((date) => new Date(date) > new Date(), {
     message: "Service time must be in the future",
   });
 
-// CREATE BOOKING
-export const createBookingSchemaZod = z.object({
+export const createBookingSchema = z.object({
   serviceId: objectId,
 
   address: z
@@ -36,22 +34,4 @@ export const createBookingSchemaZod = z.object({
     .trim()
     .max(1000, "Notes must be less than 1000 characters")
     .optional(),
-});
-
-
-// RESCHEDULE BOOKING
-export const rescheduleBookingSchemaZod = z.object({
-  dateTime: futureDate,
-});
-
-
-// UPDATE BOOKING STATUS
-export const updateBookingStatusSchemaZod = z.object({
-  status: z.enum([
-    "requested",
-    "confirmed",
-    "in-progress",
-    "completed",
-    "cancelled",
-  ]),
 });

@@ -14,9 +14,9 @@ const CustomerOnlyRoutes = () => {
         return <Navigate to= "/login" replace/>
     }
 
-  if(user.role !== "customer") {
-    return <Navigate to= "/" replace/>
-  }
+if (user.role !== "customer") {
+  return <Navigate to={`/${user.role}/dashboard`} replace />
+}
 
   return <Outlet/>
 }

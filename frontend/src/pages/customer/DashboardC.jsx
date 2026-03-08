@@ -3,9 +3,7 @@ import { useAuth } from "@/context/AuthContext.jsx";
 import { getMyBookings } from "@/services/booking.service.js";
 import { toast } from "react-toastify";
 import { BookingCard } from "@/components/customer/BookingCard";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { getMe } from "@/services/customer.service";
 
 export default function DashboardC() {
   const [deleteHover, setDeleteHover] = useState(false);

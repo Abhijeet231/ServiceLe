@@ -66,6 +66,7 @@ const router = createBrowserRouter([
                   { path: "bookings/:bookingId", element: <BookingsC /> },
                   { path: "profile", element: <ProfileC /> },
                   { path: "become-provider", element: <BecomeProvider /> },
+                  { path: "bookService", element: <ServiceDetails /> },
                 ],
               },
             ],

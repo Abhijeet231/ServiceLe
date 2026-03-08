@@ -32,7 +32,7 @@ router.patch("/:bookingId/reschedule", verifyJWT, verifyRoles("customer"),valida
 router.patch("/:bookingId/accept", verifyJWT, verifyRoles("provider"), acceptBookingRequest);
 
 // Reject a booking (provider only)
-router.patch("/:bookingId/reject", verifyJWT,  rejectBookingRequest);
+router.patch("/:bookingId/reject", verifyJWT, verifyRoles("provider"),  rejectBookingRequest);
 
 //Update Booking status (provider only)
 router.patch("/:bookingId/status", verifyJWT, verifyRoles("provider"), validate(updateBookingStatusSchemaZod), updateBookingStatus);

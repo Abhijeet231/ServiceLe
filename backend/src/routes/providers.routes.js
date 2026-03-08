@@ -20,7 +20,7 @@ router.get("/", getAllProvidersProfile);
 
 
 // Get Single Provider Profile
-router.get("/:providerId", getProviderProfileDetails);
+router.get("/me",verifyJWT, getProviderProfileDetails);
 
 
 // Toggle Availability Status

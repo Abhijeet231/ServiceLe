@@ -10,7 +10,7 @@ import { Mail, Lock } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
-  const {login} = useAuth();
+  const { login, user } = useAuth();
 
   const {
     register,
@@ -23,10 +23,20 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       const result = await login(data);
-      toast.success("Login successful!");
-      console.log("Logged in user:", result.data);
+      const loggedInUser = result.data.data;
 
-      navigate("/customer/dashboard");
+      toast.success("Login successful!");
+      console.log("Logged in user:", loggedInUser);
+
+      if (loggedInUser.role === "customer") {
+        navigate("/customer/dashboard");
+      } else if (loggedInUser.role === "provider") {
+        navigate("/provider/dashboard");
+      } else if (loggedInUser.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/");
+      }
     } catch (error) {
       toast.error("Invalid email or password");
       console.log("Login error:", error);
@@ -36,23 +46,18 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-6 bg-gray-50">
       <div className="w-full max-w-md">
-
         {/* Header */}
         <div className="text-center mb-6">
           <h2 className="font-bold text-4xl bg-linear-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mb-2">
             Welcome Back
           </h2>
 
-          <p className="text-gray-600">
-            Login to continue using ServiceLE
-          </p>
+          <p className="text-gray-600">Login to continue using ServiceLE</p>
         </div>
 
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl border-2 border-amber-200 p-8 hover:shadow-2xl transition-all duration-300">
-
           <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-
             {/* Email */}
             <div>
               <label
@@ -122,7 +127,6 @@ const Login = () => {
                 Create one
               </Link>
             </p>
-
           </form>
         </div>
       </div>
