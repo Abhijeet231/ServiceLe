@@ -1,19 +1,30 @@
 import React from "react";
-import { getAllCategory } from "@/services/category.service";
+import { getAllCategory } from "@/services/category.service.js";
 import {
   getAllServiceByCategory,
   searchServices,
-} from "@/services/service.service";
+} from "@/services/service.service.js";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext.jsx";
+import { toast } from "react-toastify";
 
 const BrowseServices = () => {
+  const {user} = useAuth();
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
+
+  // Check roles 
+  useEffect(() => {
+    if(user?.role === "provider") {
+      navigate("/provider/dashboard");
+      toast.info("You are not authorised to access Public pages!!")
+    }
+  },[user, navigate])
 
   // Fetch categories on component mount
   useEffect(() => {

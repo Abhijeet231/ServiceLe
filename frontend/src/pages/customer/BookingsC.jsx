@@ -113,7 +113,7 @@ const BookingsC = () => {
           <div className="bg-white rounded-2xl shadow-xl border border-stone-100 w-full max-w-sm overflow-hidden">
 
             {/* Amber accent */}
-            <div className="h-1 w-full bg-gradient-to-r from-amber-300 via-amber-400 to-orange-300" />
+            <div className="h-1 w-full bg-linear-to-r from-amber-300 via-amber-400 to-orange-300" />
 
             <div className="p-6">
               <h3 className="text-base font-semibold text-stone-800 mb-1">Reschedule Booking</h3>
