@@ -95,7 +95,7 @@ const router = createBrowserRouter([
                 path: "admin",
                 children: [
                   { path: "dashboard", element: <Dashboard /> },
-                  { path: "providers", element: <Providers /> },
+                  { path: "providers/:providerId", element: <Providers /> },
                 ],
               },
             ],

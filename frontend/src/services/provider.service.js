@@ -25,3 +25,7 @@ export const toggleStatus = () => {
     return api.patch("/api/v1/providers/availability")
 };
 
+// Get provider details by Id
+export const getProviderDetailsById = (credentials) => {
+    return api.get(`/api/v1/providers/${credentials}`)
+}

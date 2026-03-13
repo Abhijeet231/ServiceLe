@@ -15,6 +15,7 @@ export const getPendingProviders = asyncHandler(async (req, res) => {
   })
     .populate("userId", "name email")
     .populate("categoryId", "name")
+    .populate("serviceIds", "name")
     .lean();
 
   return res

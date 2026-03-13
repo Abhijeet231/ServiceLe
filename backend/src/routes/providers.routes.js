@@ -1,6 +1,6 @@
 import {Router} from "express";
 import verifyJWT from "../middleware/auth.middleware.js";
-import { createProviderProfile, updateProviderProfile, getAllProvidersProfile, getProviderProfileDetails, toggleAvailabilityStatus } from "../controllers/serviceProvider.controller.js";
+import { createProviderProfile, updateProviderProfile, getAllProvidersProfile, getProviderProfileDetails, toggleAvailabilityStatus, getProviderProfileById } from "../controllers/serviceProvider.controller.js";
 import { verifyRoles } from "../middleware/verifyRoles.js";
 import validate from "../middleware/validation.middleware.js";
 import { createProviderProfileSchema, updateProviderProfileSchema } from "../validations/provider.validation.js";
@@ -25,6 +25,9 @@ router.get("/me",verifyJWT, getProviderProfileDetails);
 
 // Toggle Availability Status
 router.patch("/availability", verifyJWT, verifyRoles("provider"), toggleAvailabilityStatus);
+
+// Get profile details by Id
+router.get("/:providerId", verifyJWT, getProviderProfileById);
 
 export default router;
 
