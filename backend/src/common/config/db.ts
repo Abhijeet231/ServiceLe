@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
-import type { string } from "zod";
+import { env } from "./env.js";
 
 const dbConnect = async (): Promise<void> => {
     try {
-        const MONGODB_URI = process.env.MONGODB_URI;
-        if (!MONGODB_URI) {
-            throw new Error("MONGODB_URI is not defined!")
-        }
-        const connectionInstance: mongoose.Mongoose = await mongoose.connect(MONGODB_URI);
+       
+        const connectionInstance: mongoose.Mongoose = await mongoose.connect(env.MONGODB_URI );
+
         console.log("MonogDB connected")
+        console.log("HOST:", connectionInstance.connection.host)
     } catch (error) {
         console.error("Error While Connecting to DATABASE!", error)
         process.exit(1)
