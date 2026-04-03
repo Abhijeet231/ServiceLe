@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import mongoose, { Document, Model } from "mongoose";
 
 // Defining Interface for User 
@@ -12,6 +13,7 @@ export interface IUser extends Document {
         public_id?: string;
     };
     isVerified: boolean;
+    verificationToken: String;
     resetPasswordToken?: string;
     resetPasswordExpires?: Date;
     address: string;
@@ -21,6 +23,8 @@ export interface IUser extends Document {
     };
     createdAt: Date;
     updatedAt: Date;
+
+    comparePassword(clearTextPassword: string): Promise<boolean>;
 }
 
 
@@ -65,6 +69,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    verificationToken:{
+         type: String,
+         select: false,
+    },
     resetPasswordToken: {
         type: String,
         select: false
@@ -98,6 +106,20 @@ const userSchema = new mongoose.Schema({
 
 // Location  indexing
 userSchema.index({ location: "2dsphere" });
+
+// Password Hasing
+userSchema.pre("save", async function (this:IUser) {
+    if (!this.isModified("password")) return;
+
+    this.password = await bcrypt.hash(this.password, 10);
+})
+
+// Password Comparision method
+userSchema.methods.comparePassword = async function (
+    this: IUser,
+    clearTextPassword: string): Promise<boolean> {
+    return await bcrypt.compare(clearTextPassword, this.password)
+}
 
 // Typed Model
 const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);
