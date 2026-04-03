@@ -1,9 +1,9 @@
 
-class ApiError extends Error{
+class ApiError extends Error {
 
     public statusCode: number;
 
-    constructor(statusCode:number, message: string) {
+    constructor(statusCode: number, message: string) {
         super(message);
         this.statusCode = statusCode;
 
@@ -13,19 +13,23 @@ class ApiError extends Error{
         Error.captureStackTrace(this, this.constructor);
     }
 
-    static badRequest (message:string = "Bad Request!"):ApiError{
+    static badRequest(message: string = "Bad Request!"): ApiError {
         return new ApiError(400, message)
     }
 
-    static unauthorised (message: string = "Unauthorised!"):ApiError{
+    static unauthorised(message: string = "Unauthorised!"): ApiError {
         return new ApiError(401, message)
     }
 
-    static conflict (message: string = "User already exists!"):ApiError{
+    static conflict(message: string = "User already exists!"): ApiError {
         return new ApiError(409, message)
     }
 
-    
+    static notfound(message: string = "User not found!"): ApiError {
+        return new ApiError(404, message)
+    }
+
+
 }
 
 export default ApiError;

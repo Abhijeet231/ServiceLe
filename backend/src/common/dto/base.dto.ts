@@ -1,4 +1,3 @@
-import type mongoose from "mongoose";
 import { z } from "zod";
 
 class BaseDto {

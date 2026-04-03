@@ -5,8 +5,8 @@ import { env } from "../config/env.js"
 
 // Defining Payload type
 export interface AuthPayload {
-    userId: string;
-    email?: string;
+    id : string;
+    role: string;
 
 }
 
