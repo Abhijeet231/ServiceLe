@@ -2,7 +2,7 @@ import { Response } from "express";
 
 class ApiResponse {
 
-    static ok (res: Response, message: string, data: unknown = null) {
+    static ok(res: Response, message: string, data: unknown = null) {
         return res.status(200).json({
             success: true,
             message,
@@ -15,6 +15,20 @@ class ApiResponse {
             success: true,
             message,
             data
+        });
+    }
+
+    static internalServerError(res: Response, message: string = "Internal Server Error!") {
+        return res.status(500).json({
+            success: false,
+            message
+        });
+    }
+
+    static unauthorised(res: Response, message: string = "Unauthorised") {
+        return res.status(401).json({
+            success: false,
+            message
         });
     }
 

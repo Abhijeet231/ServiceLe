@@ -29,7 +29,14 @@ class ApiError extends Error {
         return new ApiError(404, message)
     }
 
+    static internalServerError(message: string = "Internal Server Error!"): ApiError {
+        return new ApiError(500, message)
 
+    }
+
+    static forbidden(message = "Forbidden") {
+        return new ApiError(403, message);
+    }
 }
 
 export default ApiError;

@@ -191,12 +191,17 @@ const resetPassword = async (token: string, newPassword: string) => {
     user.resetPasswordExpires = undefined as any;
 
     await user.save();
+
+    return { message: "Password reset successful" }
 }
 
 // GET ME 
-const getMe = async(userId:string) => {
-    let user = await User.findById(userId);
-    if(!user) throw ApiError.notfound("User not found");
+const getMe = async (userId: string) => {
+
+    let user = await User.findById(userId)
+        .select("-password -refreshToken -resetPasswordToken -verificationToken")
+        .lean();
+    if (!user) throw ApiError.notfound("User not found");
 
     return user
 

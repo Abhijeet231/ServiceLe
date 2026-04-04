@@ -1,21 +1,16 @@
-import { ZodSchema, ZodError } from "zod";
+import { ZodType, ZodError } from "zod";
 import { Request, Response, NextFunction } from "express";
-import ApiError from "../utils/api.error.js";
 
-const validate = <T>(schema: ZodSchema<T>) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+const validate = (schema: ZodType) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     try {
-      const value = schema.parse(req.body); 
-
-      req.body = value; 
+      req.body = schema.safeParse(req.body);
       next();
-    } catch (error) {
-      if (error instanceof ZodError) {
-        const message = error.issues.map(err => err.message).join("; ");
-        throw ApiError.badRequest(message);
+    } catch (err) {
+      if (err instanceof ZodError) {
+        return next(new Error(err.issues.map(e => e.message).join("; ")));
       }
-
-      next(error);
+      next(err);
     }
   };
 };
