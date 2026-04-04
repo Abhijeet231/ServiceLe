@@ -13,7 +13,7 @@ export interface IUser extends Document {
         public_id?: string;
     };
     isVerified: boolean;
-    verificationToken: String;
+    verificationToken ?: string;
     resetPasswordToken?: string;
     resetPasswordExpires?: Date;
     address: string;

@@ -3,16 +3,15 @@ import { generateAccessToken, generateRefreshToken, verifyRefreshToken, generate
 import User from "../user/user.schema.js";
 import crypto from "crypto";
 import { HydratedDocument } from "mongoose";
-import cookieOptions from "../../common/utils/cookie.utils.js";
 
 import { IUser } from "../user/user.schema.js";
 
-const hasToken = (token: string) => {
+const hashToken = (token: string) => {
     return crypto.createHash("sha256").update(token).digest("hex")
 }
 
 // Register Type
-type RegisterInput = {
+export type RegisterInput = {
     name: string;
     email: string;
     password: string;
@@ -33,7 +32,6 @@ type LoginInput = {
     email: string;
     password: string;
 }
-
 
 
 // REGISTER SERVICE
@@ -90,12 +88,69 @@ const login = async (data: LoginInput) => {
     const accessToken = generateAccessToken({ id: user._id.toString(), role: user.role });
     const refreshToken = generateRefreshToken({ id: user._id.toString(), role: user.role });
 
-    user.refreshToken = hasToken(refreshToken);
-    await user.save({validateBeforeSave: false});
+    user.refreshToken = hashToken(refreshToken);
+    await user.save({ validateBeforeSave: false });
 
     const userObj = user.toObject();
-     const { password: _password, refreshToken:_refreshToken, ...safeUser } = userObj;     
+    const { password: _password, refreshToken: _refreshToken, ...safeUser } = userObj;
 
-    return {user: safeUser, accessToken, refreshToken}
+    return { user: safeUser, accessToken, refreshToken }
 
 }
+
+// LOGOUT SERVICE
+const logout = async (userId: string) => {
+    await User.findByIdAndUpdate(userId, {
+        $set: { refreshToken: null }
+    });
+};
+
+// REFRESH ACCESS TOKEN SERVICE
+const refresh = async (token: string) => {
+    if (!token) throw ApiError.unauthorised("Refresh Token Missing!");
+
+    let decoded;
+    try {
+        decoded = verifyRefreshToken(token);
+    } catch (error) {
+        throw ApiError.unauthorised("Invalid or Expired refresh token")
+    }
+
+    const user = await User.findById(decoded.id).select("+refreshToken");
+    if (!user) throw ApiError.unauthorised("User not found!");
+
+    if (user.refreshToken !== hashToken(token)) {
+        throw ApiError.unauthorised("Invalid refresh token")
+    }
+
+    const accessToken = generateAccessToken({ id: String(user._id), role: user.role })
+
+    return { accessToken };
+
+}
+
+// VERIFY EMAIL
+const verifyEmail = async(token: string){
+    const trimmed = String(token).trim();
+    if(!trimmed){
+        throw ApiError.badRequest("Invalid or expired verification token")
+    }
+
+    const hashedToken = hashToken(trimmed);
+    let user = await User.findOne({verificationToken: hashedToken}).select("+verificationToken")
+
+    if(!user){
+        user = await User.findOne({verificationToken: trimmed});
+    }
+
+    if(!user) throw ApiError.badRequest("Invalid or Expired token!")
+
+        user.isVerified = true;
+        user.verificationToken = undefined as any;
+        await user.save();
+
+        return user;
+}
+
+
+export { register, login, logout }

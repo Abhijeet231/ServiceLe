@@ -4,7 +4,7 @@ import { env } from "./env.js";
 const dbConnect = async (): Promise<void> => {
     try {
        
-        const connectionInstance: mongoose.Mongoose = await mongoose.connect(env.MONGODB_URI );
+        const connectionInstance = await mongoose.connect(env.MONGODB_URI );
 
         console.log("MonogDB connected")
         console.log("HOST:", connectionInstance.connection.host)

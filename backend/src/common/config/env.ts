@@ -18,16 +18,25 @@ const envSchema = z.object({
   CLOUDINARY_API_SECRET: z.string().min(1),
 
   CORS_ORIGIN: z.string().url(),
+
+  SMTP_HOST:z.email().trim().toLowerCase(),
+  SMTP_PORT: z.string(), 
+  SMTP_FROM_NAME: z.string(),
+  SMTP_FROM_EMAIL: z.email(),
+  CLIENT_URL: z.string(),
+  SMTP_USER: z.string(),
+  SMTP_PASS: z.string(),
+
 });
 
 
 
 const createEnv = (env: NodeJS.ProcessEnv) => {
-    const safeParseResult = envSchema.safeParse(env);
+  const safeParseResult = envSchema.safeParse(env);
 
-    if(!safeParseResult.success) throw new Error(safeParseResult.error.message)
+  if (!safeParseResult.success) throw new Error(safeParseResult.error.message)
 
-        return safeParseResult.data;
+  return safeParseResult.data;
 }
 
 

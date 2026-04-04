@@ -5,11 +5,12 @@ import dbConnect from "./common/config/db.js";
 import { env } from "./common/config/env.js";
 
 
-const start = async () => {
+const start = async ():Promise<void> => {
     try {
         await dbConnect();
 
-        const server = http.createServer(createApp);
+        const app = createApp();
+        const server = http.createServer(app);
 
         server.listen(env.PORT ?? 3000, () => {
             console.log(`Server is running on ${env.PORT}`)

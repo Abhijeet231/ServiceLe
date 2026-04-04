@@ -1,9 +1,10 @@
 import express from "express";
+import { Express } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { env } from "./common/config/env.js";
 
-const createApp = () => {
+const createApp = (): Express => {
 
     const app = express();
     
@@ -20,6 +21,7 @@ const createApp = () => {
     app.use(express.urlencoded({ extended: true }));
     app.use(express.static("public"));
     app.use(cookieParser())
+    // Add a Global Error Handler
 
 
 
